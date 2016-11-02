@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>休扬的博客</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script data-require="jquery@*" data-semver="2.0.3" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script data-require="bootstrap@3.1.1" data-semver="3.1.1" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script data-require="marked@*" data-semver="0.3.1" src="http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.1/marked.js"></script>
+    <script src="https://rawgit.com/lodev09/bootstrap-markdown/master/js/bootstrap-markdown.js"></script>
+    <script src="https://rawgit.com/lodev09/jquery-filedrop/master/jquery.filedrop.js"></script>
+    <script src="https://rawgit.com/jeresig/jquery.hotkeys/master/jquery.hotkeys.js"></script>
+    <link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+    <link data-require="fontawesome@4.1.0" data-semver="4.1.0" rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://rawgit.com/lodev09/bootstrap-markdown/master/css/bootstrap-markdown.min.css" />
+    <script th:src="@{/cache/js/script.js}" type="text/javascript"></script>
+    <link th:href="@{/cache/css/style.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/cache/css/bootstrap-tokenfield.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/cache/css/my.css}" rel="stylesheet" type="text/css"/>
+    <link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script th:src="@{/cache/js/bootstrap-tokenfield.js}" type="text/javascript"></script>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-12">
+        <form method="post" action="@{/blog/insert}" id="blogForm">
+            <div class="row in-md-title">
+                <div class="col-lg-7">
+                    <input type="text" class="form-control" id="title" placeholder="标题" name="title"/>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" id="tokenfield" name="tags" placeholder="选择标签"/>
+                </div>
+                <div class="col-lg-2">
+                    <button type="button" class="btn btn-primary" onclick="submit1()">确认发布</button>
+                    <button onclick="javascript:window.location.href='@{/blog/list}'" class="btn btn-primary">返回首页</button>
+                </div>
+            </div>
+            <textarea id="comment-md" name="content" placeholder="markdown语法" required="true"></textarea>
+            <br />
+            <div id="comment-md-preview-container">
+                <div class="well well-sm well-light md-preview margin-top-10" id="comment-md-preview" ></div>
+            </div>
+            <div style="display:none">
+                <textarea name="listContent" id="listContent"></textarea>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    /*
+     用途：标签选择
+     */
+    $('#tokenfield').tokenfield({
+        autocomplete: {
+            source: ['Java相关','Linux相关','前端开发','数据库','其他'],
+            delay: 100
+        },
+        showAutocompleteOnFocus: true
+    });
+    /*
+     用途：检查输入字符串是否为空或者全部都是空格
+     输入：str
+     返回：
+     如果全是空返回true,否则返回false
+     */
+    function isNull( str ){
+        if ( str == "" ) return true;
+        var regu = "^[ ]+$";
+        var re = new RegExp(regu);
+        return re.test(str);
+    }
+    function submit1(){
+        if(isNull(document.getElementById("title").value)){
+            alert("标题不能为空");
+            return;
+        }
+        if(isNull(document.getElementById("comment-md").value)){
+            alert("内容不能为空");
+            return;
+        }
+        if(isNull(document.getElementById("tokenfield").value)){
+            alert("请选择标签");
+            return;
+        }
+        document.getElementById("listContent").value=document.getElementById("comment-md-preview").innerHTML;
+        document.getElementById("blogForm").submit();
+    }
+    //编辑器支持tab键
+    document.querySelector("textarea").addEventListener('keydown',function(e) {
+        if(e.keyCode === 9) { // tab was pressed
+            // get caret position/selection
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+
+            var target = e.target;
+            var value = target.value;
+
+            // set textarea value to: text before caret + tab + text after caret
+            target.value = value.substring(0, start)
+                    + "\t"
+                    + value.substring(end);
+
+            // put caret at right position again (add one for the tab)
+            this.selectionStart = this.selectionEnd = start + 1;
+
+            // prevent the focus lose
+            e.preventDefault();
+        }
+    },false);
+
+</script>
+</body>
+
+
+</html>
+
+

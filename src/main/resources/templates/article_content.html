@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>休扬的博客</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link th:href="@{/cache/css/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/cache/css/bootstrap-theme.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/cache/css/my.css}" rel="stylesheet" type="text/css"/>
+    <script th:src="@{/cache/js/jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/cache/js/bootstrap.min.js}" type="text/javascript"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/prettify/r298/prettify.css"/>
+    <script src="http://cdn.bootcss.com/prettify/r298/prettify.js"></script>
+    <script data-require="marked@*" data-semver="0.3.1" src="http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.1/marked.js"></script>
+    <style>
+        li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
+            list-style-type: decimal !important
+        }
+    </style>
+</head>
+<body onload="prettyPrint()">
+<div th:include="common/header :: header"></div>
+<div class="container" style="padding: 0px">
+    <div class="col-lg-8">
+        <div class="panel article-list">
+            <h3><a>${blogContent.title}</a></h3>
+            <div class="blog-post-meta">
+                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> 发布于 <a href="#" title="The Visitor Design Pattern">${dateUtil.format($blogContent.createTime)}</a>
+            </div>
+            <textarea id="ssssss" style="display:none">${blogContent.content}</textarea>
+            <div id="blogContent">
+            </div>
+        </div>
+        <!-- <div class="panel comment-style">
+                 <div class="panel-heading">
+                     <h3 class="panel-title">评论留言</h3>
+                     <form action="http://www.heybug.net/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+                         <div class="form-group comment-text">
+                             <textarea name="comment" id="comment" class="form-control" rows="5" placeholder="此处填写评论" required=""></textarea>
+                         </div>
+                         <p class="form-submit">
+                             <input name="submit" type="submit" id="submit" class="btn btn-primary submit" value="提交评论">
+                             <input type="hidden" name="comment_post_ID" value="167" id="comment_post_ID">
+                             <input type="hidden" name="comment_parent" id="comment_parent" value="0">
+                         </p>
+                         <p style="display: none;">
+                             <input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="756e085017">
+                         </p>
+                         <p style="display: none;">
+                         </p>
+                         <input type="hidden" id="ak_js" name="ak_js" value="1433405968968">
+                     </form>
+                 </div>
+             </div>
+         -->
+    </div>
+    <div class="col-lg-4">
+        <div class="panel right-info">
+            <address>
+                <strong>休扬</strong><br/>
+                软件工程师，现就职于<a href="http://www.ihotdo.com">爱活动</a>北京<br/>
+                从事app服务端开发<br/>
+            </address>
+            <address>
+                <strong><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </strong>
+                <a href="mailto:jlss2011@163.com"> jlss2011@163.com</a><br/>
+            </address>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">内容分类</h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    <div th:each="tag:${blogTagList}">
+                        <a href="${blog/list(tagId=$tag.id)}" class="list-group-item">
+                            <span class="badge" th:text="${tag.blogCount}"></span>
+                            <span th:text="${tag.tagName}"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script  th:inline="javascript">
+    /*<![CDATA[*/
+    String.prototype.replaceAll = function(s1,s2) {
+        return this.replace(new RegExp(s1,"gm"),s2);
+    }
+    shtml = marked(document.getElementById("ssssss").value);
+    shtml = shtml.replaceAll("<pre><code>","<pre><code class=\"prettyprint pre-scrollable linenums\">");
+    document.getElementById("blogContent").innerHTML =shtml;
+    /*]]>*/
+</script>
+
+</body>
+</html>

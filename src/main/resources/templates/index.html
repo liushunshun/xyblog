@@ -1,0 +1,90 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>休扬的博客</title>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="休扬的个人技术博客"/>
+    <meta name="keywords" content="个人博客,技术博客,休扬的博客,休扬的个人技术博客,休扬"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link th:href="@{/cache/css/bootstrap.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/cache/css/bootstrap-theme.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/cache/css/my.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div th:include="common/header :: header"></div>
+<div class="container" style="padding: 0px">
+    <div class="col-lg-8">
+        <div class="panel article-list" th:each="blog:${blogList}">
+            <h3><a th:href="@{blog/content/{id}(id=${blog.id})}"><span th:text="${blog.title}"></span></a></h3>
+            <div class="blog-post-meta">
+                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> 发布于
+                <a title="The Visitor Design Pattern"><span th:text="${blog.createTime}"/></a>  </div>
+            <article>
+                <span th:text="${blog.listContent}"></span>
+                <a th:href="@{blog/content/{id}(id=${blog.id})}">查看更多</a>
+            </article>
+            <div class="post-tags">
+                <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+                <a th:href="@{blog/list?tagId={id}(id=${tag.id})}" rel="tag" th:each="tag:${blog.tagList}"><span th:text="${tag.tagName}"></span></a>
+            </div>
+        </div>
+        <center>
+            <nav style="margin-top:-20px;">
+                <ul class="pagination pagination-lg">
+                    <li th:classappend="${pageNum==1} ? disabled : ''" th:switch="${pageNum}"
+                    >
+                        <div th:with="perpage=${pageNum-1}"/>
+                        <a th:case="1" aria-label="Next"><span aria-hidden="true">&laquo;</span></a>
+                        <a th:case="*" aria-label="Next" href="@{blog/list(perpage=${perpage};$title=${$title};tagId=${tagId})}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <li th:each="foo:${#numbers.sequence( 1, (blogCount-1)/10+1)}"
+                        th:classappend="${pageNum==foo} ? active : ''"
+                    >
+                        <a href="@{blog/list(perpage=${perpage};$title=${$title};tagId=${tagId})}"><span th:text="${foo}"/></a>
+                    </li>
+                    <li th:classappend="${pageNum==pageCount} ? disabled : ''" th:switch="${pageNum}"
+                    >
+                        <a th:case="${(blogCount-1)/10+1}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                        <a th:case="*" aria-label="Next" href="@{blog/list(pageNum=${(blogCount-1)/10+1};$title=${$title};tagId=${tagId})}">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </center>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel right-info">
+            <address>
+                <strong>休扬</strong><br/>
+                软件工程师，现就职于<a href="http://www.ihotdo.com">爱活动</a>北京<br/>
+                从事app服务端开发<br/>
+            </address>
+            <address>
+                <strong><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> </strong>
+                <a href="mailto:jlss2011@163.com"> jlss2011@163.com</a><br/>
+            </address>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">内容分类</h3>
+            </div>
+            <div class="panel-body">
+                <div class="list-group">
+                    <div th:each="tag:${blogTagList}">
+                        <a href="${blog/list(tagId=$tag.id)}" class="list-group-item">
+                            <span class="badge" th:text="${tag.blogCount}"></span>
+                            <span th:text="${tag.tagName}"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="@{/cache/js/jquery.min.js" type="text/javascript"></script>
+<script src="@{/cache/js/bootstrap.min.js" type="text/javascript"></script>
+</body>
+</html>

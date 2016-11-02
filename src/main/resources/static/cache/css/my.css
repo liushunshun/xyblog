@@ -1,0 +1,27 @@
+body{background-color:#F9F9F9;font-family:"Microsoft YaHei"!important}
+@font-face{font-weight:400;font-style:normal;font-family:"Mr De Haviland";src:local("Mr De Haviland Regular"),local("MrDeHaviland-Regular"),url(http://fonts.gstatic.com/s/mrdehaviland/v5/fD8y4L6PJ4vqDk7z8Y8e24lF6A_zyQcEfQALPrK4qOA.woff) format("woff")}
+.color_18,.font_0{color:#337AB7}
+.font_0{font:40px/1.4em "Mr De Haviland",cursive; margin-top: -10px;}
+.navbar,.navbar-default{border-radius:0;min-height: 70px}
+.navbar-default{border-color:#E7E7E7;background-color:#FFF;background-image:none;}
+.navbar li{margin-left:30px;font-size:18px;margin-top: 10px;}
+.article-list{padding:0 30px 10px;border:1px solid #ececec;background-color:#FFF}
+.blog-post-meta{margin-bottom:20px;padding-bottom:7px;border-bottom:1px solid #ececec;color:#444;font-style:italic;font-size:15px}
+article p{margin:0 0 10px;text-align:justify;text-indent:2em;font-size:14px;line-height:175%}
+.navbar-right{margin-right:-30px}
+.post-tags{margin-top:20px;margin-bottom:0;padding:7px 0;border-top:1px solid #ececec;color:#444;font-size:15px}
+.right-info{padding:20px;border:1px solid #ececec;}
+.right-info address{line-height:25px}
+.blog-catagory{margin:10px 20px}
+.comment-style{margin-top:-15px;border:1px solid #ececec}
+.comment-text{margin-top:10px}
+.list-group{border: 0;box-shadow:0 0px 0px rgba(0,0,0,.075);margin-left: -15px;}
+.list-group-item{border: 0}
+.post-tags a {display: inline-block;line-height: 1em;padding: 6px 15px;border-radius: 15px;background: none repeat scroll 0% 0% #F1F1F1;text-shadow: 0px 1px #FFF;text-decoration: none;color: #337AB7;text-decoration: none;}
+.post-tags a:hover {background:#337AB7; color:#FFF;}
+.container a{ text-decoration: none;}
+code{line-height: 25px;}
+.in-md-title{margin:10px; margin-left: -5px;}
+h1,h2,h3{
+    color:#337ab7;
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xy.xyblog.mapper.BlogMapper">
+    <!-- 表映射 -->
+    <resultMap id="BlogResultMap" type="com.xy.xyblog.bean.Blog" >
+        <id column="_id" property="id" jdbcType="BIGINT" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="list_content" property="listContent" jdbcType="VARCHAR" />
+        <result column="classify" property="classify" jdbcType="INTEGER"/>
+        <result column="tags" property="tags" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="is_valid" property="isValid" jdbcType="INTEGER"/>
+    </resultMap>
+  	
+    <sql id="Base_Column_List" >
+        _id,title,content,list_content,classify,tags,create_time,update_time,is_valid
+    </sql>
+  
+    <!-- 增加一条记录-->
+    <insert id="insert" parameterType="com.xy.xyblog.bean.Blog" useGeneratedKeys="true" keyProperty="id" >
+        insert into blog_info (title,content,list_content,classify,tags,create_time)
+        values (#{title,jdbcType=VARCHAR}, 
+        #{content,jdbcType=VARCHAR}, 
+        #{listContent,jdbcType=VARCHAR}, 
+        #{classify,jdbcType=INTEGER}, 
+        #{tags,jdbcType=VARCHAR}, 
+        #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+  	
+    <!-- 根据ID查询订单 -->
+    <select id="getBlogById" parameterType="java.lang.Long" resultMap="BlogResultMap">
+        select <include refid="Base_Column_List"/> from blog_info where _id = #{id,jdbcType=BIGINT} and is_valid=1
+    </select>
+	
+    <sql id="searchInConditions">
+        <!-- 标题 -->
+        <if test="title != null">
+            and title like CONCAT('%', #{title,jdbcType=VARCHAR},'%') 
+        </if>
+        <!-- 分类 -->
+        <if test="classify != null">
+            and classify = #{classify,jdbcType=INTEGER} 
+        </if>
+        <if test="tagId != null">
+            and CONCAT(',',tags,',') like CONCAT('%,',#{tagId,jdbcType=INTEGER},',%')
+        </if>
+        and is_valid=1
+    </sql>
+	
+    <!-- 查询订单 -->
+    <select id="getBlogListBySearchIn" parameterType="com.xy.xyblog.bean.qbean.BlogQBean" resultMap="BlogResultMap">
+        select _id,title,list_content,classify,tags,create_time,update_time from blog_info
+        <where>
+            <![CDATA[ 1=1 ]]> 
+            <include refid="searchInConditions"/>
+        </where>
+        <if test="sort != null and sort!='' " >
+            <if test="order != null and order!='' ">
+                order by ${order} ${sort} 
+            </if>
+        </if>
+        <include refid="common.page" />
+    </select>
+    <!-- 按条件统计数量 -->
+    <select id="countBlogListBySearchIn" parameterType="com.xy.xyblog.bean.qbean.BlogQBean" resultType="java.lang.Integer">
+        select count(_id) from blog_info 
+        <where>
+            <![CDATA[ 1=1 ]]> 
+            <include refid="searchInConditions"/>
+        </where>
+    </select>  
+
+    <!-- 删除,逻辑删除  -->
+    <update id="deleteBlog" parameterType="java.lang.Long">
+        update blog_info set is_valid=0,update_time=now() where _id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

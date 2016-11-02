@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.xy.xyblog.mapper.TagMapper">
+    <!-- 表映射 -->
+    <resultMap id="TagResultMap" type="com.xy.xyblog.bean.Tag" >
+        <id column="_id" property="id" jdbcType="INTEGER" />
+        <result column="tag_type" property="tagType" jdbcType="INTEGER" />
+        <result column="tag_name" property="tagName" jdbcType="VARCHAR" />
+        <result column="keyword" property="keyword" jdbcType="VARCHAR" />
+        <result column="is_valid" property="isValid" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="TagRelationResultMap" type="com.xy.xyblog.bean.TagRelation" >
+        <id column="_id" property="id" jdbcType="BIGINT" />
+        <result column="rel_type" property="relType" jdbcType="INTEGER" />
+        <result column="rel_id" property="relId" jdbcType="BIGINT" />
+        <result column="tag_id" property="tagId" jdbcType="INTEGER" />
+    </resultMap>
+    
+    <sql id="Tag_Column_List" >
+        _id,tag_type,tag_name,keyword,is_valid
+    </sql>
+    <sql id="TagRelation_Column_List" >
+        _id,rel_type,rel_id,tag_id
+    </sql>
+  
+    <!-- 批量增加-->
+    <insert id="insertTagRelationBatch" useGeneratedKeys="true" parameterType="java.util.List">
+	insert into tag_relation (rel_type,rel_id,tag_id) 
+	values
+	<foreach collection="list" item="item" index="index" separator="," >
+		(#{item.relType},#{item.relId},#{item.tagId})
+	</foreach>
+    </insert>
+  	
+    <!-- 根据类型查询标签 -->
+    <select id="getTagByType" parameterType="java.lang.Integer" resultMap="TagResultMap">
+        select <include refid="Tag_Column_List"/> from tag_info where tag_type = #{tagType,jdbcType=INTEGER} and is_valid=1 order by _id asc
+    </select>
+    
+    <!-- 统计标签关系数量 -->
+    <select id="countRelationByType" parameterType="map" resultType="java.lang.Integer">
+        select count(_id) from tag_relation where tag_id = #{tagId,jdbcType=INTEGER} and rel_type=#{relationType,jdbcType=INTEGER}
+    </select>
+</mapper>
